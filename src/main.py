@@ -1,3 +1,6 @@
-from fastapi import FastAPI
+from src.core.config import Settings
+from src.entrypoints.api.registrar import create_app
 
-app = FastAPI()
+settings = Settings()
+
+app = create_app(settings)

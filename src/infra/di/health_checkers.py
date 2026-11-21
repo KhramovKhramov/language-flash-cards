@@ -1,0 +1,24 @@
+from collections.abc import Iterable
+
+from dishka import Provider, Scope, provide
+from sqlalchemy.ext.asyncio import AsyncEngine
+
+from src.domain.interfaces.health_checker import IComponentHealthChecker
+from src.infra.health_checkers import PostgresHealthChecker
+
+
+class HealthCheckersProvider(Provider):
+    """DI provider of system health checkers."""
+
+    scope = Scope.REQUEST
+
+    @provide
+    def get_pg_checker(self, engine: AsyncEngine) -> PostgresHealthChecker:
+        return PostgresHealthChecker(engine)
+
+    @provide
+    def get_all_checkers(
+        self,
+        pg_checker: PostgresHealthChecker,
+    ) -> Iterable[IComponentHealthChecker]:
+        return [pg_checker]

@@ -21,7 +21,7 @@ class PostgresHealthChecker:
             async with asyncio.timeout(2):
                 async with self._engine.connect() as connection:
                     await connection.execute(text("SELECT 1"))
-        except (OSError, SQLAlchemyError):
+        except OSError, SQLAlchemyError:
             logger.warning("PostgreSQL health check failed", exc_info=True)
             return ComponentHealthStatus(
                 component_name=SystemComponent.POSTGRES,
